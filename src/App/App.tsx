@@ -1,3 +1,3 @@
-const App = (): JSX.Element => <div>React App Template</div>;
+const App = (): JSX.Element => <div>Visualization assignment</div>;
 
 export { App };
