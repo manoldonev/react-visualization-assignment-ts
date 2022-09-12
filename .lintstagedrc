@@ -1,0 +1,11 @@
+{
+  "*.{html,css}": [
+    "prettier --write"
+  ],
+  "*.{ts,tsx}": [
+    "prettier --write",
+    "pnpm run lint:fix --cache --cache-location ./node_modules/.cache/.eslintcache",
+    "tsc-files --noEmit",
+    "pnpm run test:related"
+  ]
+}
