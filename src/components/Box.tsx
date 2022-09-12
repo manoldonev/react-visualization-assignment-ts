@@ -1,32 +1,51 @@
+import { useAtom } from 'jotai';
+import { selectionAtom } from '../atoms/selectionAtom';
 import type { Color, RectShape } from '../models/shape';
 
-// NOTE: tailwind can only find classes that exist as complete unbroken strings in the source files.
-const mapColor = (color: Color): string => {
+const mapColor = (color: Color, isSelected: boolean): string => {
+  // NOTE: tailwind can only find classes that exist as complete unbroken strings in the source files.
   switch (color) {
     case 'blue':
-      return 'fill-blue-500/40';
+      return isSelected ? 'fill-blue-500' : 'fill-blue-500/40';
     case 'green':
-      return 'fill-green-500/40';
+      return isSelected ? 'fill-green-500' : 'fill-green-500/40';
     case 'orange':
-      return 'fill-orange-500/40';
+      return isSelected ? 'fill-orange-500' : 'fill-orange-500/40';
     default:
       throw new Error('Unknown color');
   }
 };
 
 const Box = ({ data }: { data: RectShape }): JSX.Element => {
+  const [selection, setSelection] = useAtom(selectionAtom);
+  const isSelected = selection.has(data.id);
+
+  const handleClick = (): void => {
+    const newSelection = new Set(selection);
+    if (isSelected) {
+      newSelection.delete(data.id);
+      setSelection(newSelection);
+    } else {
+      newSelection.add(data.id);
+      setSelection(newSelection);
+    }
+  };
+
   return (
     <svg
-      className="hover:cursor-pointer hover:bg-slate-50 hover:border-slate-300 border h-32 w-32"
+      className={`h-32 w-32 border-2 hover:cursor-pointer hover:border-slate-300 hover:bg-slate-50 ${
+        isSelected ? 'border-fuchsia-400 bg-fuchsia-100/50 hover:border-fuchsia-400 hover:bg-fuchsia-100/50' : ''
+      }`}
       viewBox="0 0 128 128"
+      onClick={handleClick}
     >
       {data.size === 'small' && (
-        <rect x={48} y={48} className={`h-8 w-8 ${mapColor(data.color)} stroke-slate-400/40`} />
+        <rect x={48} y={48} className={`h-8 w-8 ${mapColor(data.color, isSelected)} stroke-black/10 stroke-[0.5]`} />
       )}
       {data.size === 'large' && (
-        <rect x={32} y={32} className={`h-16 w-16 ${mapColor(data.color)} stroke-slate-400/40`} />
+        <rect x={32} y={32} className={`h-16 w-16 ${mapColor(data.color, isSelected)} stroke-black/10 stroke-[0.5]`} />
       )}
-      {data.dot && <circle cx="50%" cy="50%" r={5} className="fill-white stroke-slate-400/40" />}
+      {data.dot && <circle cx="50%" cy="50%" r={5} className="fill-white stroke-black/10 stroke-[0.5]" />}
     </svg>
   );
 };

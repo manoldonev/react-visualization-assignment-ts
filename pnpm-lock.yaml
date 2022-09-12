@@ -28,6 +28,7 @@ specifiers:
   eslint-plugin-testing-library: ^5.5.1
   gh-pages: ^4.0.0
   husky: ^8.0.1
+  jotai: ^1.8.3
   jsdom: ^20.0.0
   lint-staged: ^13.0.3
   postcss: ^8.4.16
@@ -49,6 +50,7 @@ dependencies:
   '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
   '@testing-library/user-event': 14.4.3_wl4iynrlixafokvgqnhzlvigei
   '@vitejs/plugin-react': 2.1.0_vite@3.1.0
+  jotai: 1.8.3_obstn65pa6zrrg27pp7sudypiq
   jsdom: 20.0.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
@@ -3108,6 +3110,44 @@ packages:
       ci-info: 3.4.0
       graceful-fs: 4.2.10
       picomatch: 2.3.1
+
+  /jotai/1.8.3_obstn65pa6zrrg27pp7sudypiq:
+    resolution: {integrity: sha512-bNAs/DMD6BEB4xxVku33CI+ZIFyCWG82Ms6JnvYunEvGCnviTTDBl+m0HKgijoHmcNM3fxQ5MARdG+wwokNxog==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      '@babel/core': '*'
+      '@babel/template': '*'
+      '@tanstack/query-core': '*'
+      '@urql/core': '*'
+      immer: '*'
+      optics-ts: '*'
+      react: '>=16.8'
+      valtio: '*'
+      wonka: '*'
+      xstate: '*'
+    peerDependenciesMeta:
+      '@babel/core':
+        optional: true
+      '@babel/template':
+        optional: true
+      '@tanstack/query-core':
+        optional: true
+      '@urql/core':
+        optional: true
+      immer:
+        optional: true
+      optics-ts:
+        optional: true
+      valtio:
+        optional: true
+      wonka:
+        optional: true
+      xstate:
+        optional: true
+    dependencies:
+      '@babel/core': 7.19.0
+      react: 18.2.0
+    dev: false
 
   /js-sdsl/4.1.4:
     resolution: {integrity: sha512-Y2/yD55y5jteOAmY50JbUZYwk3CP3wnLPEZnlR1w9oKhITrBEtAxwuWKebFf8hMrPMgbYwFoWK/lH2sBkErELw==}
