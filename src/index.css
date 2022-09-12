@@ -11,5 +11,9 @@
   }
 }
 
+h1 {
+  @apply text-xl font-semibold;
+}
+
 @tailwind components;
 @tailwind utilities;
