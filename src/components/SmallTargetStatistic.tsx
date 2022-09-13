@@ -8,9 +8,17 @@ const formatPercent = (value: number): string => {
   return `${value.toLocaleString(undefined, { style: 'percent' })}`;
 };
 
+const validateInput = (value: number): void => {
+  if (value < 0 || value > 1) {
+    throw new Error('Target value should be between 0 and 1');
+  }
+};
+
 const scaleWidth = 132;
 
 const SmallTargetStatistic = ({ target, className = '' }: { target: number; className?: string }): JSX.Element => {
+  validateInput(target);
+
   const [selection] = useAtom(selectionAtom);
   const totalCount = selection.size;
   let smallCount = 0;
