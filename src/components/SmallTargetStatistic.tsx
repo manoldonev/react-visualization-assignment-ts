@@ -38,7 +38,6 @@ const SmallTargetStatistic = ({ target, className = '' }: { target: number; clas
     }
 
     if (targetTextElement.current != null) {
-      console.log(targetTextElement.current);
       targetTextElement.current.setAttribute(
         'x',
         (targetTickX - targetTextElement.current.getComputedTextLength() / 2).toFixed(0),
@@ -69,7 +68,7 @@ const SmallTargetStatistic = ({ target, className = '' }: { target: number; clas
     <div className={className}>
       <svg className="h-24 w-72" viewBox="-72 0 288 96">
         <text ref={targetTextElement} y={12} className="fill-black">
-          Small Target Target: {formatPercent(target)}
+          Small Target: {formatPercent(target)}
         </text>
         <line ref={targetTickElement} y1={16} y2={28} className="stroke-black stroke-[3]" shapeRendering="crispEdges" />
         <line x1={0} x2={scaleWidth} y1={28.5} y2={28.5} shapeRendering="crispEdges" strokeWidth={1} stroke="black" />
