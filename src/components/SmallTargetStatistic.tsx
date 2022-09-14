@@ -33,19 +33,19 @@ const SmallTargetStatistic = ({ target, className = '' }: { target: number; clas
   const isInitialRender = useInitialRender();
   const targetTextElement = useRef<SVGTextElement | null>(null);
   const targetTickElement = useRef<SVGLineElement | null>(null);
-  const actualTextElement = useRef<SVGTextElement | null>(null);
+  const actualGroupElement = useRef<SVGGElement | null>(null);
   const actualTickElement = useRef<SVGLineElement | null>(null);
-  const diffTextElement = useRef<SVGTextElement | null>(null);
+  const diffGroupElement = useRef<SVGGElement | null>(null);
 
   useEffect(() => {
     const targetTickX = target * scaleWidth;
 
-    if (targetTickElement.current != null) {
+    if (targetTickElement.current !== null) {
       targetTickElement.current.setAttribute('x1', targetTickX.toFixed(0));
       targetTickElement.current.setAttribute('x2', targetTickX.toFixed(0));
     }
 
-    if (targetTextElement.current != null) {
+    if (targetTextElement.current !== null) {
       targetTextElement.current.setAttribute(
         'x',
         (targetTickX - targetTextElement.current.getComputedTextLength() / 2).toFixed(0),
@@ -56,19 +56,27 @@ const SmallTargetStatistic = ({ target, className = '' }: { target: number; clas
   useEffect(() => {
     const actualTickX = actual * scaleWidth;
 
-    if (actualTickElement.current != null) {
+    if (actualTickElement.current !== null) {
       const transformValue = actualTickX.toFixed(0);
       actualTickElement.current.style.transform = `translateX(${transformValue}px)`;
     }
 
-    if (actualTextElement.current != null) {
-      const transformValue = (actualTickX - actualTextElement.current.getComputedTextLength() / 2).toFixed(0);
-      actualTextElement.current.style.transform = `translateX(${transformValue}px)`;
+    if (actualGroupElement.current !== null) {
+      const textElement = actualGroupElement.current.firstElementChild as SVGTextElement | null;
+
+      if (textElement !== null) {
+        const transformValue = (actualTickX - textElement.getComputedTextLength() / 2).toFixed(0);
+        actualGroupElement.current.style.transform = `translateX(${transformValue}px)`;
+      }
     }
 
-    if (diffTextElement.current != null) {
-      const transformValue = (actualTickX - diffTextElement.current.getComputedTextLength() / 2).toFixed(0);
-      diffTextElement.current.style.transform = `translateX(${transformValue}px)`;
+    if (diffGroupElement.current !== null) {
+      const textElement = diffGroupElement.current.firstElementChild as SVGTextElement | null;
+
+      if (textElement !== null) {
+        const transformValue = (actualTickX - textElement.getComputedTextLength() / 2).toFixed(0);
+        diffGroupElement.current.style.transform = `translateX(${transformValue}px)`;
+      }
     }
   }, [actual]);
 
@@ -88,20 +96,25 @@ const SmallTargetStatistic = ({ target, className = '' }: { target: number; clas
           shapeRendering="crispEdges"
         />
 
-        <text
-          ref={actualTextElement}
-          y={56}
-          className={`fill-fuchsia-400 ${isInitialRender ? 'transition-none' : 'transition-transform'} duration-1000`}
+        {/* HACK: using SVG containers as css transform on SVG text elements does not work in Safari */}
+        <g
+          ref={actualGroupElement}
+          className={`${isInitialRender ? 'transition-none' : 'transition-transform'} duration-1000`}
         >
-          Actual: {formatPercent(actual)}
-        </text>
-        <text
-          ref={diffTextElement}
-          y={74}
-          className={`fill-fuchsia-400 ${isInitialRender ? 'transition-none' : 'transition-transform'} duration-1000`}
+          <text y={56} className="fill-fuchsia-400">
+            Actual: {formatPercent(actual)}
+          </text>
+        </g>
+
+        {/* HACK: using SVG containers as css transform on SVG text elements does not work in Safari */}
+        <g
+          ref={diffGroupElement}
+          className={`${isInitialRender ? 'transition-none' : 'transition-transform'} duration-1000`}
         >
-          Difference: {formatPercent(Math.abs(target - actual))}
-        </text>
+          <text y={74} className="fill-fuchsia-400">
+            Difference: {formatPercent(Math.abs(target - actual))}
+          </text>
+        </g>
       </svg>
     </div>
   );
