@@ -1,12 +1,10 @@
+import type { RectShape } from '../../models/shape';
 import { BoxListItem } from './BoxListItem';
-import { getShapes } from '../models/shape';
 
-const BoxList = (): JSX.Element => {
-  const shapes = getShapes();
-
+const BoxList = ({ data }: { data: RectShape[] | undefined }): JSX.Element => {
   return (
     <ul className="flex max-w-5xl flex-wrap gap-x-2 gap-y-3">
-      {shapes.map((item) => (
+      {data?.map((item) => (
         <BoxListItem key={item.id} data={item} />
       ))}
     </ul>

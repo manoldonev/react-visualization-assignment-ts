@@ -1,0 +1,1 @@
+export { SmallTargetStatistic } from './SmallTargetStatistic';

@@ -25,5 +25,10 @@ describe('SmallTargetStatistic component', () => {
     expect(() => render(<SmallTargetStatistic target={targetValue} />)).toThrow(
       /target value should be between 0 and 1/i,
     );
+
+    const actualValue = 7;
+    expect(() => render(<SmallTargetStatistic target={0.1} actual={actualValue} />)).toThrow(
+      /actual value should be between 0 and 1/i,
+    );
   });
 });
