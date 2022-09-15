@@ -13,14 +13,16 @@ const validateInput = (value: number, propName: string): void => {
 
 const scaleWidth = 132;
 
-const SmallTargetStatistic = ({
+const TargetStatistic = ({
   target,
+  targetLabel,
   actual = 0,
-  className = '',
+  'data-testid': dataTestId,
 }: {
   target: number;
+  targetLabel: string;
   actual?: number;
-  className?: string;
+  'data-testid'?: string;
 }): JSX.Element => {
   validateInput(target, 'Target');
   validateInput(actual, 'Actual');
@@ -76,10 +78,10 @@ const SmallTargetStatistic = ({
   }, [actual]);
 
   return (
-    <div className={className}>
+    <div data-testid={dataTestId}>
       <svg className="h-24 w-72" viewBox="-72 0 288 96">
         <text ref={targetTextElement} y={12} className="fill-black">
-          Small Target: {formatPercent(target)}
+          {targetLabel}: {formatPercent(target)}
         </text>
         <line ref={targetTickElement} y1={16} y2={28} className="stroke-black stroke-[3]" shapeRendering="crispEdges" />
         <line x1={0} x2={scaleWidth} y1={28.5} y2={28.5} shapeRendering="crispEdges" strokeWidth={1} stroke="black" />
@@ -115,4 +117,4 @@ const SmallTargetStatistic = ({
   );
 };
 
-export { SmallTargetStatistic };
+export { TargetStatistic };
