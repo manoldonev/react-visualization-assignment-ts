@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { SmallTargetStatistic } from './SmallTargetStatistic';
+import { TargetStatistic } from './TargetStatistic';
 
 const assertSmallTargetStatistic = ({ target, actual }: { target: number; actual: number }): void => {
   const targetElement = screen.getByText(new RegExp(`small target:.+${target}%`, 'i'));
@@ -15,19 +15,19 @@ const assertSmallTargetStatistic = ({ target, actual }: { target: number; actual
 describe('SmallTargetStatistic component', () => {
   test('renders without crashing', async () => {
     const targetValue = 0.2;
-    render(<SmallTargetStatistic target={targetValue} />);
+    render(<TargetStatistic targetLabel="Small Target" target={targetValue} />);
 
     assertSmallTargetStatistic({ target: targetValue * 100, actual: 0 });
   });
 
   test('throws error with invalid input', async () => {
     const targetValue = 10;
-    expect(() => render(<SmallTargetStatistic target={targetValue} />)).toThrow(
+    expect(() => render(<TargetStatistic targetLabel="Small Target" target={targetValue} />)).toThrow(
       /target value should be between 0 and 1/i,
     );
 
     const actualValue = 7;
-    expect(() => render(<SmallTargetStatistic target={0.1} actual={actualValue} />)).toThrow(
+    expect(() => render(<TargetStatistic targetLabel="Small Target" target={0.1} actual={actualValue} />)).toThrow(
       /actual value should be between 0 and 1/i,
     );
   });

@@ -1,22 +1,12 @@
-import { useAtom } from 'jotai';
-import { selectionAtom } from '../../atoms/selectionAtom';
-import { BoxList, SmallTargetStatistic } from '../../components';
+import { BoxList, TargetStatistic } from '../../components';
+import { useActualValuesComputation } from './hooks';
 import { useShapes } from './query/useShapes';
 
 const targetValue = 0.6;
 
 const Analytics = (): JSX.Element => {
   const { data: shapes, isLoading, isEmpty } = useShapes();
-  const [selection] = useAtom(selectionAtom);
-
-  const totalCount = selection.size;
-  let smallCount = 0;
-  let actualValue = 0;
-  if (totalCount > 0) {
-    smallCount = (shapes ?? []).filter((shape) => selection.has(shape.id) && shape.size === 'small').length;
-
-    actualValue = smallCount / totalCount;
-  }
+  const { actualOrangeValue, actualSmallValue } = useActualValuesComputation();
 
   return (
     <main className="min-h-screen">
@@ -27,7 +17,20 @@ const Analytics = (): JSX.Element => {
 
       {shapes != null && shapes.length > 0 && (
         <div className="mx-auto flex w-fit flex-col p-4">
-          <SmallTargetStatistic target={targetValue} actual={actualValue} className="mx-auto" />
+          <div className="flex flex-col justify-center sm:flex-row">
+            <TargetStatistic
+              data-testid="small-target"
+              targetLabel="Small Target"
+              target={targetValue}
+              actual={actualSmallValue}
+            />
+            <TargetStatistic
+              data-testid="orange-target"
+              targetLabel="Orange Target"
+              target={targetValue}
+              actual={actualOrangeValue}
+            />
+          </div>
           <BoxList data={shapes} />
         </div>
       )}

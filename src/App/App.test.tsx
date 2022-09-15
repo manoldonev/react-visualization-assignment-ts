@@ -5,15 +5,27 @@ import { rest } from 'msw';
 import { server } from '../mocks/server';
 import { App } from './App';
 
-const assertSmallTargetStatistic = ({ target, actual }: { target: number; actual: number }): void => {
-  const targetElement = screen.getByText(new RegExp(`small target:.+${target}%`, 'i'));
+const assertTargetStatistic = ({
+  target,
+  actual,
+  testId,
+}: {
+  target: number;
+  actual: number;
+  testId: string;
+}): void => {
+  const targetElement = screen.getByTestId(testId);
   expect(targetElement).toBeInTheDocument();
 
-  const actualElement = screen.getByText(new RegExp(`actual:.+${actual}%`, 'i'));
-  expect(actualElement).toBeInTheDocument();
+  const targetScope = within(targetElement);
+  const targetLabelElement = targetScope.getByText(new RegExp(`.+target:.+${target}%`, 'i'));
+  expect(targetLabelElement).toBeInTheDocument();
 
-  const diffElement = screen.getByText(new RegExp(`difference:.+${Math.abs(target - actual)}%`, 'i'));
-  expect(diffElement).toBeInTheDocument();
+  const actualLabelElement = targetScope.getByText(new RegExp(`actual:.+${actual}%`, 'i'));
+  expect(actualLabelElement).toBeInTheDocument();
+
+  const diffLabelElement = targetScope.getByText(new RegExp(`difference:.+${Math.abs(target - actual)}%`, 'i'));
+  expect(diffLabelElement).toBeInTheDocument();
 };
 
 const queryErrorHandler = vi.fn();
@@ -62,7 +74,8 @@ describe('visualization app', () => {
     const itemElements = await listScope.findAllByRole('listitem');
     expect(itemElements).toHaveLength(21);
 
-    assertSmallTargetStatistic({ target: 60, actual: 0 });
+    assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
+    assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
   });
 
   test('handles server error gracefully', async () => {
@@ -92,12 +105,14 @@ describe('visualization app', () => {
       await user.click(svgElements[0]); // select
       await user.click(svgElements[1]); // select
 
-      assertSmallTargetStatistic({ target: 60, actual: 0 });
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
 
       await user.click(svgElements[1]); // unselect
       await user.click(svgElements[0]); // unselect
 
-      assertSmallTargetStatistic({ target: 60, actual: 0 });
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
     });
 
     test('should select / unselect (with small box)', async () => {
@@ -112,13 +127,15 @@ describe('visualization app', () => {
       await user.click(svgElements[1]); // select
       await user.click(svgElements[2]); // select
 
-      assertSmallTargetStatistic({ target: 60, actual: 33 });
+      assertTargetStatistic({ target: 60, actual: 33, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 33, testId: 'orange-target' });
 
       await user.click(svgElements[2]); // unselect
       await user.click(svgElements[1]); // unselect
       await user.click(svgElements[0]); // unselect
 
-      assertSmallTargetStatistic({ target: 60, actual: 0 });
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
     });
 
     test('should select / unselect (only small boxes)', async () => {
@@ -132,12 +149,14 @@ describe('visualization app', () => {
       await user.click(svgElements[2]); // select
       await user.click(svgElements[3]); // select
 
-      assertSmallTargetStatistic({ target: 60, actual: 100 });
+      assertTargetStatistic({ target: 60, actual: 100, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 100, testId: 'orange-target' });
 
       await user.click(svgElements[3]); // unselect
       await user.click(svgElements[2]); // unselect
 
-      assertSmallTargetStatistic({ target: 60, actual: 0 });
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
     });
   });
 
@@ -158,14 +177,15 @@ describe('visualization app', () => {
       expect(svgElements[1]).toHaveFocus();
       await user.keyboard('{space}'); // select
 
-      assertSmallTargetStatistic({ target: 60, actual: 0 });
-
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
       await user.keyboard('{space}'); // unselect
 
       await user.tab({ shift: true }); // tab back
       await user.keyboard('{space}'); // unselect
 
-      assertSmallTargetStatistic({ target: 60, actual: 0 });
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
     });
 
     test('should select / unselect (with small box)', async () => {
@@ -188,7 +208,8 @@ describe('visualization app', () => {
       expect(svgElements[2]).toHaveFocus();
       await user.keyboard('{space}'); // select
 
-      assertSmallTargetStatistic({ target: 60, actual: 33 });
+      assertTargetStatistic({ target: 60, actual: 33, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 33, testId: 'orange-target' });
 
       await user.keyboard('{space}'); // unselect
 
@@ -198,7 +219,8 @@ describe('visualization app', () => {
       await user.tab({ shift: true }); // tab back
       await user.keyboard('{space}'); // unselect
 
-      assertSmallTargetStatistic({ target: 60, actual: 0 });
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
     });
 
     test('should select / unselect (only small boxes)', async () => {
@@ -219,14 +241,16 @@ describe('visualization app', () => {
       expect(svgElements[3]).toHaveFocus();
       await user.keyboard('{space}'); // select
 
-      assertSmallTargetStatistic({ target: 60, actual: 100 });
+      assertTargetStatistic({ target: 60, actual: 100, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 100, testId: 'orange-target' });
 
       await user.keyboard('{space}'); // unselect
 
       await user.tab({ shift: true }); // tab back
       await user.keyboard('{space}'); // unselect
 
-      assertSmallTargetStatistic({ target: 60, actual: 0 });
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
     });
   });
 });
