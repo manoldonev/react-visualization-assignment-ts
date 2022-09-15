@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { useInitialRender } from '../../hooks/useInitialRender';
 
 const formatPercent = (value: number): string => {
@@ -32,7 +32,7 @@ const SmallTargetStatistic = ({
   const actualTickElement = useRef<SVGLineElement | null>(null);
   const diffGroupElement = useRef<SVGGElement | null>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const targetTickX = target * scaleWidth;
 
     if (targetTickElement.current !== null) {
@@ -48,7 +48,7 @@ const SmallTargetStatistic = ({
     }
   }, [target]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const actualTickX = actual * scaleWidth;
 
     if (actualTickElement.current !== null) {
