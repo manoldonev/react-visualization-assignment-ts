@@ -1,6 +1,7 @@
 import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Provider } from 'jotai';
 import { rest } from 'msw';
 import { server } from '../mocks/server';
 import { App } from './App';
@@ -54,7 +55,9 @@ const queryClient = new QueryClient({
 const TestApp = (): JSX.Element => {
   return (
     <QueryClientProvider client={queryClient}>
-      <App />
+      <Provider>
+        <App />
+      </Provider>
     </QueryClientProvider>
   );
 };
@@ -95,6 +98,9 @@ describe('visualization app', () => {
 
     const noDataElement = screen.getByText(/no data available/i);
     expect(noDataElement).toBeVisible();
+
+    const undoElement = screen.queryByText(/undo/i);
+    expect(undoElement).not.toBeInTheDocument();
   });
 
   describe('box list selection', () => {
@@ -162,10 +168,8 @@ describe('visualization app', () => {
       assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
     });
-  });
 
-  describe('box list selection with keyboard', () => {
-    test('should select / unselect (no small box)', async () => {
+    test('should select / unselect (no small box) with keyboard', async () => {
       render(<TestApp />);
 
       const boxListElement = await screen.findByRole('list');
@@ -173,7 +177,6 @@ describe('visualization app', () => {
       const svgElements = await listScope.findAllByRole('button');
 
       const user = userEvent.setup();
-      await user.tab(); // undo button
 
       await user.tab();
       expect(svgElements[0]).toHaveFocus();
@@ -194,7 +197,7 @@ describe('visualization app', () => {
       assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
     });
 
-    test('should select / unselect (with small box)', async () => {
+    test('should select / unselect (with small box) with keyboard', async () => {
       render(<TestApp />);
 
       const boxListElement = await screen.findByRole('list');
@@ -202,7 +205,6 @@ describe('visualization app', () => {
       const svgElements = await listScope.findAllByRole('button');
 
       const user = userEvent.setup();
-      await user.tab(); // undo button
 
       await user.tab();
       expect(svgElements[0]).toHaveFocus();
@@ -231,7 +233,7 @@ describe('visualization app', () => {
       assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
     });
 
-    test('should select / unselect (only small boxes)', async () => {
+    test('should select / unselect (only small boxes) with keyboard', async () => {
       render(<TestApp />);
 
       const boxListElement = await screen.findByRole('list');
@@ -239,7 +241,6 @@ describe('visualization app', () => {
       const svgElements = await listScope.findAllByRole('button');
 
       const user = userEvent.setup();
-      await user.tab(); // undo button
 
       await user.tab();
       await user.tab();
@@ -261,6 +262,95 @@ describe('visualization app', () => {
 
       assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
+    });
+  });
+
+  describe('box list undo support', () => {
+    test('should undo if action log not empty', async () => {
+      render(<TestApp />);
+
+      const boxListElement = await screen.findByRole('list');
+      const listScope = within(boxListElement);
+      const svgElements = await listScope.findAllByRole('button');
+
+      const undoElement = screen.getByText(/undo/i);
+      expect(undoElement).toBeInTheDocument();
+      expect(undoElement).toBeDisabled();
+
+      const user = userEvent.setup();
+      await user.click(svgElements[3]); // select
+      await user.click(svgElements[4]); // select
+
+      expect(undoElement).toBeEnabled();
+
+      assertTargetStatistic({ target: 60, actual: 50, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 100, testId: 'orange-target' });
+
+      await user.click(undoElement); // undo (unselect)
+
+      assertTargetStatistic({ target: 60, actual: 100, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 100, testId: 'orange-target' });
+
+      await user.click(undoElement); // undo (unselect)
+
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
+
+      expect(undoElement).toBeDisabled();
+    });
+
+    test('should undo if action log not empty with keyboard', async () => {
+      render(<TestApp />);
+
+      const boxListElement = await screen.findByRole('list');
+      const listScope = within(boxListElement);
+      const svgElements = await listScope.findAllByRole('button');
+
+      const undoElement = screen.getByText(/undo/i);
+      expect(undoElement).toBeInTheDocument();
+      expect(undoElement).toBeDisabled();
+
+      const user = userEvent.setup();
+
+      await user.tab();
+      await user.tab();
+      await user.tab();
+
+      await user.tab();
+      expect(svgElements[3]).toHaveFocus();
+      await user.keyboard('{space}'); // select
+
+      assertTargetStatistic({ target: 60, actual: 100, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 100, testId: 'orange-target' });
+
+      await user.tab();
+      expect(svgElements[4]).toHaveFocus();
+      await user.keyboard('{space}'); // select
+
+      assertTargetStatistic({ target: 60, actual: 50, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 100, testId: 'orange-target' });
+
+      await user.tab({ shift: true }); // tab back
+      await user.tab({ shift: true }); // tab back
+      await user.tab({ shift: true }); // tab back
+      await user.tab({ shift: true }); // tab back
+      await user.tab({ shift: true }); // tab back
+
+      expect(undoElement).toHaveFocus();
+      expect(undoElement).toBeEnabled();
+      await user.keyboard('{enter}'); // undo (unselect)
+
+      assertTargetStatistic({ target: 60, actual: 100, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 100, testId: 'orange-target' });
+
+      expect(undoElement).toHaveFocus();
+      expect(undoElement).toBeEnabled();
+      await user.keyboard('{enter}'); // undo (unselect)
+
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
+
+      expect(undoElement).toBeDisabled();
     });
   });
 });
