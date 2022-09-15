@@ -31,6 +31,7 @@ specifiers:
   eslint-plugin-testing-library: ^5.5.1
   gh-pages: ^4.0.0
   husky: ^8.0.1
+  immer: ^9.0.15
   jotai: ^1.8.3
   jsdom: ^20.0.0
   lint-staged: ^13.0.3
@@ -58,7 +59,8 @@ dependencies:
   '@testing-library/user-event': 14.4.3_wl4iynrlixafokvgqnhzlvigei
   '@vitejs/plugin-react': 2.1.0_vite@3.1.0
   axios: 0.27.2
-  jotai: 1.8.3_obstn65pa6zrrg27pp7sudypiq
+  immer: 9.0.15
+  jotai: 1.8.3_bgdli2pd6zodwqnwqsgwbmub5e
   jsdom: 20.0.0
   msw: 0.47.2_typescript@4.8.3
   react: 18.2.0
@@ -3242,6 +3244,10 @@ packages:
     engines: {node: '>= 4'}
     dev: true
 
+  /immer/9.0.15:
+    resolution: {integrity: sha512-2eB/sswms9AEUSkOm4SbV5Y7Vmt/bKRwByd52jfLkW4OLYeaTP3EEiJ9agqU0O/tq6Dk62Zfj+TJSqfm1rLVGQ==}
+    dev: false
+
   /import-fresh/3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
     engines: {node: '>=6'}
@@ -3523,7 +3529,7 @@ packages:
       graceful-fs: 4.2.10
       picomatch: 2.3.1
 
-  /jotai/1.8.3_obstn65pa6zrrg27pp7sudypiq:
+  /jotai/1.8.3_bgdli2pd6zodwqnwqsgwbmub5e:
     resolution: {integrity: sha512-bNAs/DMD6BEB4xxVku33CI+ZIFyCWG82Ms6JnvYunEvGCnviTTDBl+m0HKgijoHmcNM3fxQ5MARdG+wwokNxog==}
     engines: {node: '>=12.7.0'}
     peerDependencies:
@@ -3558,6 +3564,7 @@ packages:
         optional: true
     dependencies:
       '@babel/core': 7.19.0
+      immer: 9.0.15
       react: 18.2.0
     dev: false
 

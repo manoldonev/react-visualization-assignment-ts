@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
+import { enableMapSet as enableImmerMapSet } from 'immer';
 import { App } from './App';
 import { reportWebVitals } from './reportWebVitals';
 import { queryClient } from './queryClient';
@@ -27,6 +28,8 @@ const initializeMockServiceWorker = async (): Promise<void> => {
 
 const main = async (): Promise<void> => {
   await initializeMockServiceWorker();
+
+  enableImmerMapSet();
 
   const container = document.getElementById('root');
   if (container == null) {
