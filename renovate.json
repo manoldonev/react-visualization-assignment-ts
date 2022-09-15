@@ -16,7 +16,7 @@
   "prCreation": "not-pending",
   "packageRules": [
     {
-      "matchPackagePatterns": ["^vitest"],
+      "matchPackagePatterns": ["^vitest", "^msw"],
       "matchUpdateTypes": ["major", "minor"],
       "dependencyDashboardApproval": true
     }
