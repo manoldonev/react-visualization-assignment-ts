@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai';
 import type { KeyboardEvent } from 'react';
-import { selectionAtom } from '../atoms/selectionAtom';
-import type { Color, RectShape } from '../models/shape';
+import { selectionAtom } from '../../atoms/selectionAtom';
+import type { Color, RectShape } from '../../models/shape';
 
 const mapColor = (color: Color, isSelected: boolean): string => {
   // NOTE: tailwind can only find classes that exist as complete unbroken strings in the source files.

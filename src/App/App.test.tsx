@@ -1,5 +1,8 @@
-import { render, screen, within } from '@testing-library/react';
+import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { rest } from 'msw';
+import { server } from '../mocks/server';
 import { App } from './App';
 
 const assertSmallTargetStatistic = ({ target, actual }: { target: number; actual: number }): void => {
@@ -13,25 +16,75 @@ const assertSmallTargetStatistic = ({ target, actual }: { target: number; actual
   expect(diffElement).toBeInTheDocument();
 };
 
+const queryErrorHandler = vi.fn();
+
+const queryCache = new QueryCache({
+  onError: queryErrorHandler,
+});
+
+const queryClient = new QueryClient({
+  queryCache,
+  defaultOptions: {
+    queries: {
+      retry: false,
+      cacheTime: Infinity,
+    },
+  },
+  logger: {
+    // eslint-disable-next-line no-console
+    log: console.log,
+    // eslint-disable-next-line no-console
+    warn: console.warn,
+    error: () => {},
+  },
+});
+
+const TestApp = (): JSX.Element => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
+  );
+};
+
 describe('visualization app', () => {
+  afterEach(async () => {
+    queryCache.clear();
+  });
+
   test('app renders without crashing', async () => {
-    render(<App />);
+    render(<TestApp />);
 
-    assertSmallTargetStatistic({ target: 60, actual: 0 });
-
-    const boxListElement = screen.getByRole('list');
+    const boxListElement = await screen.findByRole('list');
     expect(boxListElement).toBeInTheDocument();
 
     const listScope = within(boxListElement);
     const itemElements = await listScope.findAllByRole('listitem');
     expect(itemElements).toHaveLength(21);
+
+    assertSmallTargetStatistic({ target: 60, actual: 0 });
+  });
+
+  test('handles server error gracefully', async () => {
+    server.use(
+      rest.get('https://mdonev-mock.com/shapes', (_req, res, ctx) => {
+        return res.once(ctx.status(500, 'Mocked server error'));
+      }),
+    );
+
+    render(<TestApp />);
+
+    await waitFor(() => expect(queryErrorHandler).toHaveBeenCalledTimes(1));
+
+    const noDataElement = screen.getByText(/no data available/i);
+    expect(noDataElement).toBeVisible();
   });
 
   describe('box list selection', () => {
     test('should select / unselect (no small box)', async () => {
-      render(<App />);
+      render(<TestApp />);
 
-      const boxListElement = screen.getByRole('list');
+      const boxListElement = await screen.findByRole('list');
       const listScope = within(boxListElement);
       const svgElements = await listScope.findAllByRole('button');
 
@@ -48,9 +101,9 @@ describe('visualization app', () => {
     });
 
     test('should select / unselect (with small box)', async () => {
-      render(<App />);
+      render(<TestApp />);
 
-      const boxListElement = screen.getByRole('list');
+      const boxListElement = await screen.findByRole('list');
       const listScope = within(boxListElement);
       const svgElements = await listScope.findAllByRole('button');
 
@@ -69,9 +122,9 @@ describe('visualization app', () => {
     });
 
     test('should select / unselect (only small boxes)', async () => {
-      render(<App />);
+      render(<TestApp />);
 
-      const boxListElement = screen.getByRole('list');
+      const boxListElement = await screen.findByRole('list');
       const listScope = within(boxListElement);
       const svgElements = await listScope.findAllByRole('button');
 
@@ -90,9 +143,9 @@ describe('visualization app', () => {
 
   describe('box list selection with keyboard', () => {
     test('should select / unselect (no small box)', async () => {
-      render(<App />);
+      render(<TestApp />);
 
-      const boxListElement = screen.getByRole('list');
+      const boxListElement = await screen.findByRole('list');
       const listScope = within(boxListElement);
       const svgElements = await listScope.findAllByRole('button');
 
@@ -116,9 +169,9 @@ describe('visualization app', () => {
     });
 
     test('should select / unselect (with small box)', async () => {
-      render(<App />);
+      render(<TestApp />);
 
-      const boxListElement = screen.getByRole('list');
+      const boxListElement = await screen.findByRole('list');
       const listScope = within(boxListElement);
       const svgElements = await listScope.findAllByRole('button');
 
@@ -149,9 +202,9 @@ describe('visualization app', () => {
     });
 
     test('should select / unselect (only small boxes)', async () => {
-      render(<App />);
+      render(<TestApp />);
 
-      const boxListElement = screen.getByRole('list');
+      const boxListElement = await screen.findByRole('list');
       const listScope = within(boxListElement);
       const svgElements = await listScope.findAllByRole('button');
 

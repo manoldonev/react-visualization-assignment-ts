@@ -4,15 +4,19 @@
   "version": "0.4.0",
   "private": true,
   "dependencies": {
+    "@tanstack/react-query": "^4.3.4",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^14.2.1",
     "@vitejs/plugin-react": "^2.0.0",
+    "axios": "^0.27.2",
     "jotai": "^1.8.3",
     "jsdom": "^20.0.0",
+    "msw": "^0.47.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-error-boundary": "^3.1.4",
+    "react-hot-toast": "^2.4.0",
     "typescript": "^4.7.4",
     "vite": "^3.0.0",
     "vite-tsconfig-paths": "^3.5.0",
@@ -76,5 +80,8 @@
       "last 1 safari version"
     ]
   },
-  "packageManager": "pnpm@7.11.0"
+  "packageManager": "pnpm@7.11.0",
+  "msw": {
+    "workerDirectory": "public"
+  }
 }

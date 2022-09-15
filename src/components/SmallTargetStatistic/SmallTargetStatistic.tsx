@@ -1,34 +1,29 @@
-import { useAtom } from 'jotai';
 import { useEffect, useRef } from 'react';
-import { useInitialRender } from '../hooks/useInitialRender';
-import { selectionAtom } from '../atoms/selectionAtom';
-import { getShapes } from '../models/shape';
+import { useInitialRender } from '../../hooks/useInitialRender';
 
 const formatPercent = (value: number): string => {
   return `${value.toLocaleString(undefined, { style: 'percent' })}`;
 };
 
-const validateInput = (value: number): void => {
+const validateInput = (value: number, propName: string): void => {
   if (value < 0 || value > 1) {
-    throw new Error('Target value should be between 0 and 1');
+    throw new Error(`${propName} value should be between 0 and 1`);
   }
 };
 
 const scaleWidth = 132;
 
-const SmallTargetStatistic = ({ target, className = '' }: { target: number; className?: string }): JSX.Element => {
-  validateInput(target);
-
-  const [selection] = useAtom(selectionAtom);
-  const totalCount = selection.size;
-  let smallCount = 0;
-  let actual = 0;
-  if (totalCount > 0) {
-    const shapes = getShapes();
-    smallCount = shapes.filter((shape) => selection.has(shape.id) && shape.size === 'small').length;
-
-    actual = smallCount / totalCount;
-  }
+const SmallTargetStatistic = ({
+  target,
+  actual = 0,
+  className = '',
+}: {
+  target: number;
+  actual?: number;
+  className?: string;
+}): JSX.Element => {
+  validateInput(target, 'Target');
+  validateInput(actual, 'Actual');
 
   const isInitialRender = useInitialRender();
   const targetTextElement = useRef<SVGTextElement | null>(null);
