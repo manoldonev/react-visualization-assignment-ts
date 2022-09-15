@@ -6,7 +6,10 @@ import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/extend-expect';
 import 'whatwg-fetch';
 import { beforeAll } from 'vitest';
+import { enableMapSet as enableImmerMapSet } from 'immer';
 import { server } from './mocks/server';
+
+enableImmerMapSet();
 
 // Establish API mocking before all tests.
 beforeAll(() => server.listen());

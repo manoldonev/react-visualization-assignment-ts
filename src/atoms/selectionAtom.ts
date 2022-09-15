@@ -1,3 +1,3 @@
-import { atom } from 'jotai';
+import { atomWithImmer } from 'jotai/immer';
 
-export const selectionAtom = atom(new Set<string>());
+export const selectionAtom = atomWithImmer(new Set<string>());

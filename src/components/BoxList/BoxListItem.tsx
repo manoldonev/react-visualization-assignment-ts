@@ -1,5 +1,6 @@
 import { useAtom } from 'jotai';
 import type { KeyboardEvent } from 'react';
+import { actionLogAtom } from '../../atoms/actionLogAtom';
 import { selectionAtom } from '../../atoms/selectionAtom';
 import type { Color, RectShape } from '../../models/shape';
 
@@ -19,17 +20,25 @@ const mapColor = (color: Color, isSelected: boolean): string => {
 
 const BoxListItem = ({ data }: { data: RectShape }): JSX.Element => {
   const [selection, setSelection] = useAtom(selectionAtom);
+  const [, setActionLog] = useAtom(actionLogAtom);
   const isSelected = selection.has(data.id);
 
   const handleSelection = (): void => {
-    const newSelection = new Set(selection);
-    if (isSelected) {
-      newSelection.delete(data.id);
-      setSelection(newSelection);
-    } else {
-      newSelection.add(data.id);
-      setSelection(newSelection);
-    }
+    setSelection((draft) => {
+      if (isSelected) {
+        draft.delete(data.id);
+      } else {
+        draft.add(data.id);
+      }
+    });
+
+    setActionLog((draft) => {
+      if (isSelected) {
+        draft.push({ type: 'unselect', id: data.id });
+      } else {
+        draft.push({ type: 'select', id: data.id });
+      }
+    });
   };
 
   const handleKeyUp = (e: KeyboardEvent<SVGSVGElement>): void => {

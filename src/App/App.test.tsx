@@ -64,7 +64,7 @@ describe('visualization app', () => {
     queryCache.clear();
   });
 
-  test('app renders without crashing', async () => {
+  test('renders without crashing', async () => {
     render(<TestApp />);
 
     const boxListElement = await screen.findByRole('list');
@@ -76,6 +76,10 @@ describe('visualization app', () => {
 
     assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
     assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
+
+    const undoElement = screen.getByText(/undo/i);
+    expect(undoElement).toBeInTheDocument();
+    expect(undoElement).toBeDisabled();
   });
 
   test('handles server error gracefully', async () => {
@@ -169,6 +173,8 @@ describe('visualization app', () => {
       const svgElements = await listScope.findAllByRole('button');
 
       const user = userEvent.setup();
+      await user.tab(); // undo button
+
       await user.tab();
       expect(svgElements[0]).toHaveFocus();
       await user.keyboard('{space}'); // select
@@ -196,6 +202,8 @@ describe('visualization app', () => {
       const svgElements = await listScope.findAllByRole('button');
 
       const user = userEvent.setup();
+      await user.tab(); // undo button
+
       await user.tab();
       expect(svgElements[0]).toHaveFocus();
       await user.keyboard('{space}'); // select
@@ -231,6 +239,8 @@ describe('visualization app', () => {
       const svgElements = await listScope.findAllByRole('button');
 
       const user = userEvent.setup();
+      await user.tab(); // undo button
+
       await user.tab();
       await user.tab();
       await user.tab();
