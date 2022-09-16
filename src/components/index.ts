@@ -1,2 +1,2 @@
-export { BoxList } from './BoxList';
+export { BoxButton } from './BoxButton';
 export { TargetStatistic } from './TargetStatistic';

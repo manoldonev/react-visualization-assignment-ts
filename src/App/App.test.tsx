@@ -109,17 +109,17 @@ describe('visualization app', () => {
 
       const boxListElement = await screen.findByRole('list');
       const listScope = within(boxListElement);
-      const svgElements = await listScope.findAllByRole('button');
+      const svgButtonElements = await listScope.findAllByRole('button');
 
       const user = userEvent.setup();
-      await user.click(svgElements[0]); // select
-      await user.click(svgElements[1]); // select
+      await user.click(svgButtonElements[0]); // select
+      await user.click(svgButtonElements[1]); // select
 
       assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
 
-      await user.click(svgElements[1]); // unselect
-      await user.click(svgElements[0]); // unselect
+      await user.click(svgButtonElements[1]); // unselect
+      await user.click(svgButtonElements[0]); // unselect
 
       assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
@@ -130,19 +130,19 @@ describe('visualization app', () => {
 
       const boxListElement = await screen.findByRole('list');
       const listScope = within(boxListElement);
-      const svgElements = await listScope.findAllByRole('button');
+      const svgButtonElements = await listScope.findAllByRole('button');
 
       const user = userEvent.setup();
-      await user.click(svgElements[0]); // select
-      await user.click(svgElements[1]); // select
-      await user.click(svgElements[2]); // select
+      await user.click(svgButtonElements[0]); // select
+      await user.click(svgButtonElements[1]); // select
+      await user.click(svgButtonElements[2]); // select
 
       assertTargetStatistic({ target: 60, actual: 33, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 33, testId: 'orange-target' });
 
-      await user.click(svgElements[2]); // unselect
-      await user.click(svgElements[1]); // unselect
-      await user.click(svgElements[0]); // unselect
+      await user.click(svgButtonElements[2]); // unselect
+      await user.click(svgButtonElements[1]); // unselect
+      await user.click(svgButtonElements[0]); // unselect
 
       assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
@@ -153,17 +153,17 @@ describe('visualization app', () => {
 
       const boxListElement = await screen.findByRole('list');
       const listScope = within(boxListElement);
-      const svgElements = await listScope.findAllByRole('button');
+      const svgButtonElements = await listScope.findAllByRole('button');
 
       const user = userEvent.setup();
-      await user.click(svgElements[2]); // select
-      await user.click(svgElements[3]); // select
+      await user.click(svgButtonElements[2]); // select
+      await user.click(svgButtonElements[3]); // select
 
       assertTargetStatistic({ target: 60, actual: 100, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 100, testId: 'orange-target' });
 
-      await user.click(svgElements[3]); // unselect
-      await user.click(svgElements[2]); // unselect
+      await user.click(svgButtonElements[3]); // unselect
+      await user.click(svgButtonElements[2]); // unselect
 
       assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
@@ -174,24 +174,24 @@ describe('visualization app', () => {
 
       const boxListElement = await screen.findByRole('list');
       const listScope = within(boxListElement);
-      const svgElements = await listScope.findAllByRole('button');
+      const svgButtonElements = await listScope.findAllByRole('button');
 
       const user = userEvent.setup();
 
       await user.tab();
-      expect(svgElements[0]).toHaveFocus();
-      await user.keyboard('{space}'); // select
+      expect(svgButtonElements[0]).toHaveFocus();
+      await user.keyboard('{enter}'); // select
 
       await user.tab();
-      expect(svgElements[1]).toHaveFocus();
-      await user.keyboard('{space}'); // select
+      expect(svgButtonElements[1]).toHaveFocus();
+      await user.keyboard('{enter}'); // select
 
       assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
-      await user.keyboard('{space}'); // unselect
+      await user.keyboard('{enter}'); // unselect
 
       await user.tab({ shift: true }); // tab back
-      await user.keyboard('{space}'); // unselect
+      await user.keyboard('{enter}'); // unselect
 
       assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
@@ -202,32 +202,32 @@ describe('visualization app', () => {
 
       const boxListElement = await screen.findByRole('list');
       const listScope = within(boxListElement);
-      const svgElements = await listScope.findAllByRole('button');
+      const svgButtonElements = await listScope.findAllByRole('button');
 
       const user = userEvent.setup();
 
       await user.tab();
-      expect(svgElements[0]).toHaveFocus();
-      await user.keyboard('{space}'); // select
+      expect(svgButtonElements[0]).toHaveFocus();
+      await user.keyboard('{enter}'); // select
 
       await user.tab();
-      expect(svgElements[1]).toHaveFocus();
-      await user.keyboard('{space}'); // select
+      expect(svgButtonElements[1]).toHaveFocus();
+      await user.keyboard('{enter}'); // select
 
       await user.tab();
-      expect(svgElements[2]).toHaveFocus();
-      await user.keyboard('{space}'); // select
+      expect(svgButtonElements[2]).toHaveFocus();
+      await user.keyboard('{enter}'); // select
 
       assertTargetStatistic({ target: 60, actual: 33, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 33, testId: 'orange-target' });
 
-      await user.keyboard('{space}'); // unselect
+      await user.keyboard('{enter}'); // unselect
 
       await user.tab({ shift: true }); // tab back
-      await user.keyboard('{space}'); // unselect
+      await user.keyboard('{enter}'); // unselect
 
       await user.tab({ shift: true }); // tab back
-      await user.keyboard('{space}'); // unselect
+      await user.keyboard('{enter}'); // unselect
 
       assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
@@ -238,27 +238,27 @@ describe('visualization app', () => {
 
       const boxListElement = await screen.findByRole('list');
       const listScope = within(boxListElement);
-      const svgElements = await listScope.findAllByRole('button');
+      const svgButtonElements = await listScope.findAllByRole('button');
 
       const user = userEvent.setup();
 
       await user.tab();
       await user.tab();
       await user.tab();
-      expect(svgElements[2]).toHaveFocus();
-      await user.keyboard('{space}'); // select
+      expect(svgButtonElements[2]).toHaveFocus();
+      await user.keyboard('{enter}'); // select
 
       await user.tab();
-      expect(svgElements[3]).toHaveFocus();
-      await user.keyboard('{space}'); // select
+      expect(svgButtonElements[3]).toHaveFocus();
+      await user.keyboard('{enter}'); // select
 
       assertTargetStatistic({ target: 60, actual: 100, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 100, testId: 'orange-target' });
 
-      await user.keyboard('{space}'); // unselect
+      await user.keyboard('{enter}'); // unselect
 
       await user.tab({ shift: true }); // tab back
-      await user.keyboard('{space}'); // unselect
+      await user.keyboard('{enter}'); // unselect
 
       assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
@@ -271,15 +271,15 @@ describe('visualization app', () => {
 
       const boxListElement = await screen.findByRole('list');
       const listScope = within(boxListElement);
-      const svgElements = await listScope.findAllByRole('button');
+      const svgButtonElements = await listScope.findAllByRole('button');
 
       const undoElement = screen.getByText(/undo/i);
       expect(undoElement).toBeInTheDocument();
       expect(undoElement).toBeDisabled();
 
       const user = userEvent.setup();
-      await user.click(svgElements[3]); // select
-      await user.click(svgElements[4]); // select
+      await user.click(svgButtonElements[3]); // select
+      await user.click(svgButtonElements[4]); // select
 
       expect(undoElement).toBeEnabled();
 
@@ -304,7 +304,7 @@ describe('visualization app', () => {
 
       const boxListElement = await screen.findByRole('list');
       const listScope = within(boxListElement);
-      const svgElements = await listScope.findAllByRole('button');
+      const svgButtonElements = await listScope.findAllByRole('button');
 
       const undoElement = screen.getByText(/undo/i);
       expect(undoElement).toBeInTheDocument();
@@ -317,15 +317,15 @@ describe('visualization app', () => {
       await user.tab();
 
       await user.tab();
-      expect(svgElements[3]).toHaveFocus();
-      await user.keyboard('{space}'); // select
+      expect(svgButtonElements[3]).toHaveFocus();
+      await user.keyboard('{enter}'); // select
 
       assertTargetStatistic({ target: 60, actual: 100, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 100, testId: 'orange-target' });
 
       await user.tab();
-      expect(svgElements[4]).toHaveFocus();
-      await user.keyboard('{space}'); // select
+      expect(svgButtonElements[4]).toHaveFocus();
+      await user.keyboard('{enter}'); // select
 
       assertTargetStatistic({ target: 60, actual: 50, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 100, testId: 'orange-target' });
