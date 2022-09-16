@@ -1,28 +1,24 @@
 import { useAtom } from 'jotai';
 import type { RectShape } from '../../../models/shape';
 import { BoxButton } from '../../../components/BoxButton';
-import { actionLogAtom, selectionAtom } from '../../../atoms';
+import { mementoLogAtom, selectionAtom } from '../atoms';
 
 const BoxChart = ({ data }: { data: RectShape[] | undefined }): JSX.Element => {
   const [selection, setSelection] = useAtom(selectionAtom);
-  const [, setActionLog] = useAtom(actionLogAtom);
+  const [, setMementoLog] = useAtom(mementoLogAtom);
 
   const handleSelection = (id: string): void => {
     const wasPreviouslySelected = selection.has(id);
+
+    setMementoLog((draft) => {
+      draft.push({ selection });
+    });
 
     setSelection((draft) => {
       if (wasPreviouslySelected) {
         draft.delete(id);
       } else {
         draft.add(id);
-      }
-    });
-
-    setActionLog((draft) => {
-      if (wasPreviouslySelected) {
-        draft.push({ type: 'unselect', id });
-      } else {
-        draft.push({ type: 'select', id });
       }
     });
   };
