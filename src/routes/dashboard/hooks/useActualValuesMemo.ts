@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import { useMemo } from 'react';
-import { selectionAtom } from '../../../atoms/selectionAtom';
+import { selectionAtom } from '../atoms/selectionAtom';
 import { useShapes } from '../query/useShapes';
 
 export interface ActualValuesType {
