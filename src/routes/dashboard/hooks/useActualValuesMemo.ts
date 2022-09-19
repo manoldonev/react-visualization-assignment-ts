@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import { useMemo } from 'react';
-import { selectionAtom } from '../atoms/selectionAtom';
+import { selectedItemsAtom } from '../atoms/selectedItemsAtom';
 import { useShapes } from '../query/useShapes';
 
 export interface ActualValuesType {
@@ -10,10 +10,10 @@ export interface ActualValuesType {
 
 const useActualValuesMemo = (): ActualValuesType => {
   const { data } = useShapes();
-  const [selection] = useAtom(selectionAtom);
+  const [selectedItems] = useAtom(selectedItemsAtom);
 
   return useMemo(() => {
-    const totalCount = selection.size;
+    const totalCount = selectedItems.size;
     if (totalCount === 0) {
       return { actualOrangeValue: 0, actualSmallValue: 0 };
     }
@@ -22,7 +22,7 @@ const useActualValuesMemo = (): ActualValuesType => {
     let orangeCount = 0;
 
     (data ?? []).forEach((item) => {
-      if (!selection.has(item.id)) {
+      if (!selectedItems.has(item.id)) {
         return;
       }
 
@@ -31,7 +31,7 @@ const useActualValuesMemo = (): ActualValuesType => {
     });
 
     return { actualOrangeValue: orangeCount / totalCount, actualSmallValue: smallCount / totalCount };
-  }, [data, selection]);
+  }, [data, selectedItems]);
 };
 
 export { useActualValuesMemo };
