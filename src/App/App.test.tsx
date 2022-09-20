@@ -81,8 +81,13 @@ describe('visualization app', () => {
     assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
 
     const undoElement = screen.getByText(/undo/i);
-    expect(undoElement).toBeInTheDocument();
     expect(undoElement).toBeDisabled();
+
+    const redoElement = screen.getByText(/redo/i);
+    expect(redoElement).toBeDisabled();
+
+    const resetElement = screen.getByText(/reset/i);
+    expect(resetElement).toBeDisabled();
   });
 
   test('handles server error gracefully', async () => {
@@ -101,9 +106,15 @@ describe('visualization app', () => {
 
     const undoElement = screen.queryByText(/undo/i);
     expect(undoElement).not.toBeInTheDocument();
+
+    const redoElement = screen.queryByText(/redo/i);
+    expect(redoElement).not.toBeInTheDocument();
+
+    const resetElement = screen.queryByText(/reset/i);
+    expect(resetElement).not.toBeInTheDocument();
   });
 
-  describe('box list selection', () => {
+  describe('selection', () => {
     test('should select / unselect (no small box)', async () => {
       render(<TestApp />);
 
@@ -265,8 +276,8 @@ describe('visualization app', () => {
     });
   });
 
-  describe('box list undo support', () => {
-    test('should undo if action log not empty', async () => {
+  describe('undo / redo', () => {
+    test('should undo / redo selection', async () => {
       render(<TestApp />);
 
       const boxListElement = await screen.findByRole('list');
@@ -274,32 +285,68 @@ describe('visualization app', () => {
       const svgButtonElements = await listScope.findAllByRole('button');
 
       const undoElement = screen.getByText(/undo/i);
-      expect(undoElement).toBeInTheDocument();
+      const redoElement = screen.getByText(/redo/i);
+      const resetElement = screen.getByText(/reset/i);
+
       expect(undoElement).toBeDisabled();
+      expect(redoElement).toBeDisabled();
+      expect(resetElement).toBeDisabled();
 
       const user = userEvent.setup();
       await user.click(svgButtonElements[3]); // select
       await user.click(svgButtonElements[4]); // select
 
       expect(undoElement).toBeEnabled();
+      expect(redoElement).toBeDisabled();
+      expect(resetElement).toBeEnabled();
 
       assertTargetStatistic({ target: 60, actual: 50, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 100, testId: 'orange-target' });
 
       await user.click(undoElement); // undo (unselect)
 
+      expect(undoElement).toBeEnabled();
+      expect(redoElement).toBeEnabled();
+      expect(resetElement).toBeEnabled();
+
       assertTargetStatistic({ target: 60, actual: 100, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 100, testId: 'orange-target' });
 
+      await user.click(redoElement); // redo (select)
+
+      expect(undoElement).toBeEnabled();
+      expect(redoElement).toBeDisabled();
+      expect(resetElement).toBeEnabled();
+
+      assertTargetStatistic({ target: 60, actual: 50, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 100, testId: 'orange-target' });
+
       await user.click(undoElement); // undo (unselect)
+      await user.click(undoElement); // undo (unselect)
+
+      expect(undoElement).toBeDisabled();
+      expect(redoElement).toBeEnabled();
+      expect(resetElement).toBeEnabled();
 
       assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
 
+      await user.click(redoElement); // redo (select)
+
+      assertTargetStatistic({ target: 60, actual: 100, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 100, testId: 'orange-target' });
+
+      await user.click(resetElement); // reset to initial state
+
       expect(undoElement).toBeDisabled();
+      expect(redoElement).toBeDisabled();
+      expect(resetElement).toBeDisabled();
+
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
     });
 
-    test('should undo if action log not empty with keyboard', async () => {
+    test('should undo / redo selection with keyboard', async () => {
       render(<TestApp />);
 
       const boxListElement = await screen.findByRole('list');
@@ -307,8 +354,12 @@ describe('visualization app', () => {
       const svgButtonElements = await listScope.findAllByRole('button');
 
       const undoElement = screen.getByText(/undo/i);
-      expect(undoElement).toBeInTheDocument();
+      const redoElement = screen.getByText(/redo/i);
+      const resetElement = screen.getByText(/reset/i);
+
       expect(undoElement).toBeDisabled();
+      expect(redoElement).toBeDisabled();
+      expect(resetElement).toBeDisabled();
 
       const user = userEvent.setup();
 
@@ -320,12 +371,20 @@ describe('visualization app', () => {
       expect(svgButtonElements[3]).toHaveFocus();
       await user.keyboard('{enter}'); // select
 
+      expect(undoElement).toBeEnabled();
+      expect(redoElement).toBeDisabled();
+      expect(resetElement).toBeEnabled();
+
       assertTargetStatistic({ target: 60, actual: 100, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 100, testId: 'orange-target' });
 
       await user.tab();
       expect(svgButtonElements[4]).toHaveFocus();
       await user.keyboard('{enter}'); // select
+
+      expect(undoElement).toBeEnabled();
+      expect(redoElement).toBeDisabled();
+      expect(resetElement).toBeEnabled();
 
       assertTargetStatistic({ target: 60, actual: 50, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 100, testId: 'orange-target' });
@@ -334,25 +393,62 @@ describe('visualization app', () => {
       await user.tab({ shift: true }); // tab back
       await user.tab({ shift: true }); // tab back
       await user.tab({ shift: true }); // tab back
-      await user.tab({ shift: true }); // tab back
+
+      await user.tab({ shift: true }); // tab back (reset focused)
 
       await user.tab({ shift: true }); // tab back
-
       expect(undoElement).toHaveFocus();
-      expect(undoElement).toBeEnabled();
       await user.keyboard('{enter}'); // undo (unselect)
+
+      expect(undoElement).toBeEnabled();
+      expect(redoElement).toBeEnabled();
+      expect(resetElement).toBeEnabled();
 
       assertTargetStatistic({ target: 60, actual: 100, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 100, testId: 'orange-target' });
 
-      expect(undoElement).toHaveFocus();
+      await user.tab();
+      expect(redoElement).toHaveFocus();
+      await user.keyboard('{enter}'); // redo (select)
+
       expect(undoElement).toBeEnabled();
+      expect(redoElement).toBeDisabled();
+      expect(resetElement).toBeEnabled();
+
+      assertTargetStatistic({ target: 60, actual: 50, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 100, testId: 'orange-target' });
+
+      // HACK: works in real browser
+      // await user.tab({ shift: true }); // tab back
+      undoElement.focus();
+      expect(undoElement).toHaveFocus();
       await user.keyboard('{enter}'); // undo (unselect)
+      await user.keyboard('{enter}'); // undo (unselect)
+
+      expect(undoElement).toBeDisabled();
+      expect(redoElement).toBeEnabled();
+      expect(resetElement).toBeEnabled();
 
       assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
       assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
 
+      await user.tab();
+      expect(redoElement).toHaveFocus();
+      await user.keyboard('{enter}'); // redo (select)
+
+      assertTargetStatistic({ target: 60, actual: 100, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 100, testId: 'orange-target' });
+
+      await user.tab();
+      expect(resetElement).toHaveFocus();
+      await user.keyboard('{enter}'); // reset to initial state
+
       expect(undoElement).toBeDisabled();
+      expect(redoElement).toBeDisabled();
+      expect(resetElement).toBeDisabled();
+
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'small-target' });
+      assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
     });
   });
 });
