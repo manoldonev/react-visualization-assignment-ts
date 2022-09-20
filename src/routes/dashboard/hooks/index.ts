@@ -1,1 +1,1 @@
-export { useActualValuesMemo } from './useActualValuesMemo';
+export { useActualValues } from './useActualValues';

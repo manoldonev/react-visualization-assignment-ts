@@ -8,7 +8,7 @@ export interface ActualValuesType {
   actualSmallValue: number;
 }
 
-const useActualValuesMemo = (): ActualValuesType => {
+const useActualValues = (): ActualValuesType => {
   const { data } = useShapes();
   const [selectedItems] = useAtom(selectedItemsAtom);
 
@@ -34,4 +34,4 @@ const useActualValuesMemo = (): ActualValuesType => {
   }, [data, selectedItems]);
 };
 
-export { useActualValuesMemo };
+export { useActualValues };

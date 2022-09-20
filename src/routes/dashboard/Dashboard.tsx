@@ -1,6 +1,6 @@
 import { TargetStatistic } from '../../components';
 import { BoxChart } from './BoxChart';
-import { useActualValuesMemo } from './hooks';
+import { useActualValues } from './hooks';
 import { useShapes } from './query/useShapes';
 import { RedoButton } from './RedoButton';
 import { ResetButton } from './ResetButton';
@@ -10,7 +10,7 @@ const targetValue = 0.6;
 
 const Dashboard = (): JSX.Element => {
   const { data: shapes, isLoading, isEmpty } = useShapes();
-  const { actualOrangeValue, actualSmallValue } = useActualValuesMemo();
+  const { actualOrangeValue, actualSmallValue } = useActualValues();
 
   return (
     <main className="min-h-screen">
