@@ -20,6 +20,7 @@ export const toggleSelectionAtom = atom(null, (get, set, id: string) => {
       (patches, inversePatches) => {
         set(undoHistoryAtom, (draft) => {
           draft.undos.push({ patches, inversePatches });
+          draft.redos.length = 0;
         });
       },
     ),
