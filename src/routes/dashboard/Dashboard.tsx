@@ -1,5 +1,6 @@
 import { TargetStatistic } from '../../components';
 import { BoxChart } from './BoxChart';
+import { Header } from './Header';
 import { useActualValues } from './hooks';
 import { useShapes } from './query/useShapes';
 import { RedoButton } from './RedoButton';
@@ -13,37 +14,40 @@ const Dashboard = (): JSX.Element => {
   const { actualOrangeValue, actualSmallValue } = useActualValues();
 
   return (
-    <main className="min-h-screen">
-      <h1 className="m-4">Visualization Assignment</h1>
+    <div className="min-h-screen">
+      <Header />
 
-      {isLoading && <span className="p-4">Loading...</span>}
-      {isEmpty && <span className="p-4">No data available</span>}
+      <main>
+        {isLoading && <span className="p-4">Loading...</span>}
+        {isEmpty && <span className="p-4">No data available</span>}
 
-      {shapes != null && shapes.length > 0 && (
-        <div className="mx-auto flex w-fit flex-col p-4">
-          <div className="flex flex-col justify-center sm:flex-row">
-            <TargetStatistic
-              data-testid="small-target"
-              targetLabel="Small Target"
-              target={targetValue}
-              actual={actualSmallValue}
-            />
-            <TargetStatistic
-              data-testid="orange-target"
-              targetLabel="Orange Target"
-              target={targetValue}
-              actual={actualOrangeValue}
-            />
+        {shapes != null && shapes.length > 0 && (
+          <div className="mx-auto flex w-fit flex-col">
+            <div className="sticky top-0 flex flex-col justify-center bg-white py-3 px-4 lg:flex-row lg:items-center">
+              <TargetStatistic
+                data-testid="small-target"
+                targetLabel="Small Target"
+                target={targetValue}
+                actual={actualSmallValue}
+              />
+              <TargetStatistic
+                data-testid="orange-target"
+                targetLabel="Orange Target"
+                target={targetValue}
+                actual={actualOrangeValue}
+              />
+              <div className="flex gap-3">
+                <UndoButton />
+                <RedoButton />
+                <ResetButton />
+              </div>
+            </div>
 
-            <UndoButton className="mb-3 mr-3" />
-            <RedoButton className="mb-3 mr-3" />
-            <ResetButton className="mb-3" />
+            <BoxChart className="p-4" data={shapes} />
           </div>
-
-          <BoxChart data={shapes} />
-        </div>
-      )}
-    </main>
+        )}
+      </main>
+    </div>
   );
 };
 
