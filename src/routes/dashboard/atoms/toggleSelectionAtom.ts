@@ -1,7 +1,7 @@
 import produce from 'immer';
 import { atom } from 'jotai';
 import { selectedItemsAtom } from './selectedItemsAtom';
-import { undoStoreAtom } from './undoStoreAtom';
+import { undoHistoryAtom } from './undoHistoryAtom';
 
 // write-only action atom
 export const toggleSelectionAtom = atom(null, (get, set, id: string) => {
@@ -17,9 +17,9 @@ export const toggleSelectionAtom = atom(null, (get, set, id: string) => {
           draft.add(id);
         }
       },
-      (_patches, inversePatches) => {
-        set(undoStoreAtom, (draft) => {
-          draft.push(...inversePatches);
+      (patches, inversePatches) => {
+        set(undoHistoryAtom, (draft) => {
+          draft.undos.push({ patches, inversePatches });
         });
       },
     ),
