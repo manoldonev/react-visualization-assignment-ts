@@ -1,15 +1,15 @@
 import { useAtom } from 'jotai';
 import type { RectShape } from '../../../models/shape';
-import { BoxButton } from '../../../components/BoxButton';
+import { BoxButton } from '../../../components';
 import { selectedItemsAtom } from '../atoms';
 import { toggleSelectionAtom } from '../atoms/toggleSelectionAtom';
 
-const BoxChart = ({ data }: { data: RectShape[] | undefined }): JSX.Element => {
+const BoxChart = ({ className = '', data }: { className?: string; data: RectShape[] | undefined }): JSX.Element => {
   const [selectedItems] = useAtom(selectedItemsAtom);
   const [, setToggleSelection] = useAtom(toggleSelectionAtom);
 
   return (
-    <ul className="flex max-w-5xl flex-wrap gap-x-2 gap-y-3">
+    <ul className={`flex max-w-5xl flex-wrap gap-x-2 gap-y-3 ${className}`}>
       {data?.map((item) => (
         <li key={item.id}>
           <BoxButton data={item} isChecked={selectedItems.has(item.id)} onClick={() => setToggleSelection(item.id)} />
