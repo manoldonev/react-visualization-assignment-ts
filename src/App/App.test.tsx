@@ -346,6 +346,47 @@ describe('visualization app', () => {
       assertTargetStatistic({ target: 60, actual: 0, testId: 'orange-target' });
     });
 
+    test('should clear redo stack upon selection toggle', async () => {
+      render(<TestApp />);
+
+      const boxListElement = await screen.findByRole('list');
+      const listScope = within(boxListElement);
+      const svgButtonElements = await listScope.findAllByRole('button');
+
+      const undoElement = screen.getByText(/undo/i);
+      const redoElement = screen.getByText(/redo/i);
+      const resetElement = screen.getByText(/reset/i);
+
+      expect(undoElement).toBeDisabled();
+      expect(redoElement).toBeDisabled();
+      expect(resetElement).toBeDisabled();
+
+      const user = userEvent.setup();
+      await user.click(svgButtonElements[3]); // select
+
+      expect(undoElement).toBeEnabled();
+      expect(redoElement).toBeDisabled();
+      expect(resetElement).toBeEnabled();
+
+      await user.click(undoElement);
+
+      expect(undoElement).toBeDisabled();
+      expect(redoElement).toBeEnabled();
+      expect(resetElement).toBeEnabled();
+
+      await user.click(svgButtonElements[4]); // select
+
+      expect(undoElement).toBeEnabled();
+      expect(redoElement).toBeDisabled();
+      expect(resetElement).toBeEnabled();
+
+      await user.click(resetElement);
+
+      expect(undoElement).toBeDisabled();
+      expect(redoElement).toBeDisabled();
+      expect(resetElement).toBeDisabled();
+    });
+
     test('should undo / redo selection with keyboard', async () => {
       render(<TestApp />);
 
