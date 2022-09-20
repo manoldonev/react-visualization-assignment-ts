@@ -1,4 +1,6 @@
 export { selectedItemsAtom } from './selectedItemsAtom';
 export { toggleSelectionAtom } from './toggleSelectionAtom';
-export { undoStoreAtom } from './undoStoreAtom';
+export { undoHistoryAtom } from './undoHistoryAtom';
 export { undoAtom } from './undoAtom';
+export { redoAtom } from './redoAtom';
+export { resetAtom } from './resetAtom';

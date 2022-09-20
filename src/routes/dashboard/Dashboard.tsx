@@ -2,6 +2,8 @@ import { TargetStatistic } from '../../components';
 import { BoxChart } from './BoxChart';
 import { useActualValuesMemo } from './hooks';
 import { useShapes } from './query/useShapes';
+import { RedoButton } from './RedoButton';
+import { ResetButton } from './ResetButton';
 import { UndoButton } from './UndoButton';
 
 const targetValue = 0.6;
@@ -33,7 +35,9 @@ const Dashboard = (): JSX.Element => {
               actual={actualOrangeValue}
             />
 
-            <UndoButton className="mb-3" />
+            <UndoButton className="mb-3 mr-3" />
+            <RedoButton className="mb-3 mr-3" />
+            <ResetButton className="mb-3" />
           </div>
 
           <BoxChart data={shapes} />

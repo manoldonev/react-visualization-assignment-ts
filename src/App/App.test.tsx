@@ -336,6 +336,8 @@ describe('visualization app', () => {
       await user.tab({ shift: true }); // tab back
       await user.tab({ shift: true }); // tab back
 
+      await user.tab({ shift: true }); // tab back
+
       expect(undoElement).toHaveFocus();
       expect(undoElement).toBeEnabled();
       await user.keyboard('{enter}'); // undo (unselect)
