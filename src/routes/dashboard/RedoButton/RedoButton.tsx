@@ -1,13 +1,13 @@
 import { useAtom } from 'jotai';
 import { Button } from '../../../components';
-import { undoHistoryAtom, redoAtom } from '../atoms';
+import { canRedoAtom, useSelectController } from '../atoms';
 
 const RedoButton = ({ className = '' }: { className?: string }): JSX.Element => {
-  const [undoHistory] = useAtom(undoHistoryAtom);
-  const [, setRedo] = useAtom(redoAtom);
+  const [canRedo] = useAtom(canRedoAtom);
+  const { redo } = useSelectController();
 
   return (
-    <Button className={className} disabled={undoHistory.redos.length === 0} onClick={setRedo}>
+    <Button className={className} disabled={!canRedo} onClick={redo}>
       Redo
     </Button>
   );
