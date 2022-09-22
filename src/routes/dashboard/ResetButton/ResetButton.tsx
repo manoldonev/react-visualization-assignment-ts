@@ -1,17 +1,12 @@
-import { useAtom } from 'jotai';
 import { Button } from '../../../components';
-import { undoHistoryAtom, resetAtom } from '../atoms';
+import { useSelectController, useUndoHistoryStatus } from '../concerns';
 
 const ResetButton = ({ className = '' }: { className?: string }): JSX.Element => {
-  const [undoHistory] = useAtom(undoHistoryAtom);
-  const [, setReset] = useAtom(resetAtom);
+  const { canReset } = useUndoHistoryStatus();
+  const { reset } = useSelectController();
 
   return (
-    <Button
-      className={className}
-      disabled={undoHistory.undos.length === 0 && undoHistory.redos.length === 0}
-      onClick={setReset}
-    >
+    <Button className={className} disabled={!canReset} onClick={reset}>
       Reset
     </Button>
   );
