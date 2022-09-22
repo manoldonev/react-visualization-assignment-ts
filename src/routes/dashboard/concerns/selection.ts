@@ -1,9 +1,12 @@
-import { atom, useSetAtom } from 'jotai';
+import { atom, useAtomValue, useSetAtom } from 'jotai';
 import type { Patch } from 'immer';
 import { applyPatches, produce } from 'immer';
 import { atomWithImmer } from 'jotai/immer';
 
-// TODO: consider whether it makes sense to define "model" and "action" atoms in separate files (e.g. selection.model.ts and selection.controller.ts); currently "model" atoms are defined on top and "action" atoms at the bottom but generally we are not exporting "action" atoms themselves but exposing their functionality via a "controller" custom hook
+// TODO: jotai-in-big-project best practices still not set in stone (see https://github.com/pmndrs/jotai/discussions/896)
+// TODO: consider whether it makes sense to define "model" and "action" atoms in separate files (e.g. selection.model.ts and selection.controller.ts)
+// NOTE: currently "model" atoms are defined on top and "action" atoms at the bottom but generally we are not exporting "action" atoms themselves but exposing their functionality via a "controller" custom hook
+
 interface UndoHistory {
   undos: Undoable[];
   redos: Undoable[];
@@ -14,14 +17,29 @@ interface Undoable {
   patches: Patch[]; // redo
 }
 
+// NOTE: undoHistoryAtom is considered implementation detail and not exported by
 const undoHistoryAtom = atomWithImmer<UndoHistory>({ undos: [], redos: [] });
 
-export const canUndoAtom = atom((get) => get(undoHistoryAtom).undos.length > 0);
-export const canRedoAtom = atom((get) => get(undoHistoryAtom).redos.length > 0);
-export const canResetAtom = atom((get) => {
+const canUndoAtom = atom((get) => get(undoHistoryAtom).undos.length > 0);
+const canRedoAtom = atom((get) => get(undoHistoryAtom).redos.length > 0);
+const canResetAtom = atom((get) => {
   const history = get(undoHistoryAtom);
   return history.undos.length > 0 || history.redos.length > 0;
 });
+
+export interface UndoHistoryStatus {
+  canUndo: boolean;
+  canRedo: boolean;
+  canReset: boolean;
+}
+
+export const useUndoHistoryStatus = (): UndoHistoryStatus => {
+  return {
+    canUndo: useAtomValue(canUndoAtom),
+    canRedo: useAtomValue(canRedoAtom),
+    canReset: useAtomValue(canResetAtom),
+  };
+};
 
 export const selectedItemsAtom = atom(new Set<string>());
 
