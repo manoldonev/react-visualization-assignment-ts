@@ -96,7 +96,7 @@ const resetAtom = atom(null, (_get, set) => {
 });
 
 export interface SelectController {
-  toggleSelection: (id: string) => void;
+  toggle: (id: string) => void;
   undo: () => void;
   redo: () => void;
   reset: () => void;
@@ -104,7 +104,7 @@ export interface SelectController {
 
 export const useSelectController = (): SelectController => {
   return {
-    toggleSelection: useSetAtom(toggleSelectionAtom),
+    toggle: useSetAtom(toggleSelectionAtom),
     undo: useSetAtom(undoAtom),
     redo: useSetAtom(redoAtom),
     reset: useSetAtom(resetAtom),
