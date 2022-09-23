@@ -17,9 +17,7 @@ interface Undoable {
   patches: Patch[]; // redo
 }
 
-// NOTE: undoHistoryAtom is considered implementation detail and not exported by
 const undoHistoryAtom = atomWithImmer<UndoHistory>({ undos: [], redos: [] });
-
 const canUndoAtom = atom((get) => get(undoHistoryAtom).undos.length > 0);
 const canRedoAtom = atom((get) => get(undoHistoryAtom).redos.length > 0);
 const canResetAtom = atom((get) => {

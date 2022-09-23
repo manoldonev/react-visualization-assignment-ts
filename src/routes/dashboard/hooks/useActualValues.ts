@@ -1,6 +1,6 @@
-import { useAtom } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { useMemo } from 'react';
-import { selectedItemsAtom } from '../concerns';
+import { selectedItemsAtom } from '../concerns/selection';
 import { useShapes } from '../query/useShapes';
 
 export interface ActualValuesType {
@@ -10,7 +10,7 @@ export interface ActualValuesType {
 
 const useActualValues = (): ActualValuesType => {
   const { data } = useShapes();
-  const [selectedItems] = useAtom(selectedItemsAtom);
+  const selectedItems = useAtomValue(selectedItemsAtom);
 
   return useMemo(() => {
     const totalCount = selectedItems.size;
