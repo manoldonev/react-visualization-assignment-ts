@@ -1,5 +1,5 @@
 import { Button } from '../../../components';
-import { useSelectController, useUndoHistoryStatus } from '../concerns';
+import { useSelectController, useUndoHistoryStatus } from '../concerns/selection';
 
 const ResetButton = ({ className = '' }: { className?: string }): JSX.Element => {
   const { canReset } = useUndoHistoryStatus();
