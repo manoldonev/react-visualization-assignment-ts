@@ -1,7 +1,7 @@
 import { useAtomValue } from 'jotai';
 import type { RectShape } from '../../../models/shape';
 import { BoxButton } from '../../../components';
-import { useSelectController, selectedItemsAtom } from '../concerns/selection';
+import { useSelectController, selectedItemsAtom } from '../atoms/selection';
 
 const BoxChart = ({ className = '', data }: { className?: string; data: RectShape[] | undefined }): JSX.Element => {
   const selectedItems = useAtomValue(selectedItemsAtom);
