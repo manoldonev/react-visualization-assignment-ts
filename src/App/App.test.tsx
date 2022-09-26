@@ -2,6 +2,7 @@ import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-qu
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'jotai';
+import { queryClientAtom } from 'jotai/query';
 import { rest } from 'msw';
 import { server } from '../mocks/server';
 import { App } from './App';
@@ -55,7 +56,7 @@ const queryClient = new QueryClient({
 const TestApp = (): JSX.Element => {
   return (
     <QueryClientProvider client={queryClient}>
-      <Provider>
+      <Provider initialValues={[[queryClientAtom, queryClient]]}>
         <App />
       </Provider>
     </QueryClientProvider>
@@ -101,8 +102,14 @@ describe('visualization app', () => {
 
     await waitFor(() => expect(queryErrorHandler).toHaveBeenCalledTimes(1));
 
-    const noDataElement = screen.getByText(/no data available/i);
-    expect(noDataElement).toBeVisible();
+    const errorAlertElement = screen.getByText(/something went wrong:/i);
+    expect(errorAlertElement).toBeVisible();
+
+    const boxListElement = screen.queryByRole('list');
+    expect(boxListElement).not.toBeInTheDocument();
+
+    const noDataElement = screen.queryByText(/no data available/i);
+    expect(noDataElement).not.toBeInTheDocument();
 
     const undoElement = screen.queryByText(/undo/i);
     expect(undoElement).not.toBeInTheDocument();
