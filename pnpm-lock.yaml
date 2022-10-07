@@ -16,7 +16,7 @@ specifiers:
   '@typescript-eslint/parser': ^5.30.5
   '@vitejs/plugin-react': ^2.0.0
   autoprefixer: ^10.4.9
-  axios: ^0.27.2
+  axios: ^1.0.0
   cssnano: ^5.1.13
   eslint: ^8.19.0
   eslint-config-airbnb: ^19.0.4
@@ -60,7 +60,7 @@ dependencies:
   '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
   '@testing-library/user-event': 14.4.3_wl4iynrlixafokvgqnhzlvigei
   '@vitejs/plugin-react': 2.1.0_vite@3.1.0
-  axios: 0.27.2
+  axios: 1.1.2
   immer: 9.0.15
   jotai: 1.8.4_bgdli2pd6zodwqnwqsgwbmub5e
   jsdom: 20.0.0
@@ -105,7 +105,7 @@ devDependencies:
   postcss: 8.4.16
   prettier: 2.7.1
   prettier-plugin-tailwindcss: 0.1.13_prettier@2.7.1
-  tailwindcss: 3.1.8_ts-node@10.9.1
+  tailwindcss: 3.1.8_57znarxsqwmnneadci5z5fd5gu
   tsc-files: 1.1.3_typescript@4.8.3
 
 packages:
@@ -480,7 +480,7 @@ packages:
       cosmiconfig-typescript-loader: 4.0.0_4ewzuwoatjhxndkz2pnfgbepom
       lodash: 4.17.21
       resolve-from: 5.0.0
-      ts-node: 10.9.1_biypgpt64q46mnmiaymabwlhlm
+      ts-node: 10.9.1_rb7lfb2dlgdf5f7m6mcvvespxa
       typescript: 4.8.3
     transitivePeerDependencies:
       - '@swc/core'
@@ -1388,11 +1388,12 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /axios/0.27.2:
-    resolution: {integrity: sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==}
+  /axios/1.1.2:
+    resolution: {integrity: sha512-bznQyETwElsXl2RK7HLLwb5GPpOLlycxHCtrpDR/4RqqBzjARaOTo3jz4IgtntWUYee7Ne4S8UHd92VCuzPaWA==}
     dependencies:
       follow-redirects: 1.15.2
       form-data: 4.0.0
+      proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
     dev: false
@@ -1706,8 +1707,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
-      is-text-path: 1.0.1
       JSONStream: 1.3.5
+      is-text-path: 1.0.1
       lodash: 4.17.21
       meow: 8.1.2
       split2: 3.2.2
@@ -1741,7 +1742,7 @@ packages:
     dependencies:
       '@types/node': 14.18.28
       cosmiconfig: 7.0.1
-      ts-node: 10.9.1_biypgpt64q46mnmiaymabwlhlm
+      ts-node: 10.9.1_rb7lfb2dlgdf5f7m6mcvvespxa
       typescript: 4.8.3
     dev: true
 
@@ -4788,6 +4789,10 @@ packages:
       react-is: 16.13.1
     dev: true
 
+  /proxy-from-env/1.1.0:
+    resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
+    dev: false
+
   /psl/1.9.0:
     resolution: {integrity: sha512-E/ZsdU4HLs/68gYzgGTkMicWTLPdAftJLfJFlLUAAKZGkStNU72sZjT66SnMDVOfOWY/YAoiD7Jxa9iHvngcag==}
     dev: false
@@ -5359,10 +5364,12 @@ packages:
     resolution: {integrity: sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==}
     dev: false
 
-  /tailwindcss/3.1.8_ts-node@10.9.1:
+  /tailwindcss/3.1.8_57znarxsqwmnneadci5z5fd5gu:
     resolution: {integrity: sha512-YSneUCZSFDYMwk+TGq8qYFdCA3yfBRdBlS7txSq0LUmzyeqRe3a8fBQzbz9M3WS/iFT4BNf/nmw9mEzrnSaC0g==}
     engines: {node: '>=12.13.0'}
     hasBin: true
+    peerDependencies:
+      postcss: ^8.0.9
     dependencies:
       arg: 5.0.2
       chokidar: 3.5.3
@@ -5471,37 +5478,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       escape-string-regexp: 1.0.5
-    dev: true
-
-  /ts-node/10.9.1_biypgpt64q46mnmiaymabwlhlm:
-    resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
-    hasBin: true
-    peerDependencies:
-      '@swc/core': '>=1.2.50'
-      '@swc/wasm': '>=1.2.50'
-      '@types/node': '*'
-      typescript: '>=2.7'
-    peerDependenciesMeta:
-      '@swc/core':
-        optional: true
-      '@swc/wasm':
-        optional: true
-    dependencies:
-      '@cspotcode/source-map-support': 0.8.1
-      '@tsconfig/node10': 1.0.9
-      '@tsconfig/node12': 1.0.11
-      '@tsconfig/node14': 1.0.3
-      '@tsconfig/node16': 1.0.3
-      '@types/node': 14.18.28
-      acorn: 8.8.0
-      acorn-walk: 8.2.0
-      arg: 4.1.3
-      create-require: 1.1.1
-      diff: 4.0.2
-      make-error: 1.3.6
-      typescript: 4.8.3
-      v8-compile-cache-lib: 3.0.1
-      yn: 3.1.1
     dev: true
 
   /ts-node/10.9.1_rb7lfb2dlgdf5f7m6mcvvespxa:
