@@ -82,7 +82,7 @@
       "last 1 safari version"
     ]
   },
-  "packageManager": "pnpm@7.12.2",
+  "packageManager": "pnpm@7.14.0",
   "msw": {
     "workerDirectory": "public"
   }
