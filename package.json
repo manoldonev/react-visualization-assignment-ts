@@ -1,6 +1,6 @@
 {
-  "name": "visualization-assignment",
-  "homepage": "https://manoldonev.github.io/visualization-assignment",
+  "name": "react-visualization-assignment-ts",
+  "homepage": "https://manoldonev.github.io/react-visualization-assignment-ts",
   "version": "0.4.0",
   "private": true,
   "dependencies": {
