@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react';
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
   plugins: [react(), tsConfigPaths()],
-  base: '/visualization-assignment/',
+  base: '/react-visualization-assignment-ts/',
   publicDir: './public',
   test: {
     environment: 'jsdom',
