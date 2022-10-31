@@ -4,6 +4,8 @@ Latest deployment available at https://manoldonev.github.io/visualization-assign
 
 # Visualization Assignment SPA
 
+Assignment description is available [here](/assignment-description.md).
+
 Based on my own [React TypeScript App](https://github.com/manoldonev/react-app-template-ts) GitHub template repo:
 
 - Vite
