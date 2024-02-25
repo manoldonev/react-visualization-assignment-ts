@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { atomWithQuery } from 'jotai/query';
+import { atomWithQuery } from 'jotai-tanstack-query';
 import type { RectShape } from '../../../models/shape';
 import { shapeKeys } from '../../../queryKeyFactory';
 
@@ -10,4 +10,5 @@ export const shapesAtom = atomWithQuery(() => ({
     return res.data;
   },
   staleTime: 5000,
+  throwOnError: true,
 }));

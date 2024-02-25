@@ -1,9 +1,11 @@
+import type { ReactElement } from 'react';
 import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'jotai';
-import { queryClientAtom } from 'jotai/query';
+import { queryClientAtom } from 'jotai-tanstack-query';
 import { rest } from 'msw';
+import { useHydrateAtoms } from 'jotai/react/utils';
 import { server } from '../mocks/server';
 import { App } from './App';
 
@@ -41,23 +43,23 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: false,
-      cacheTime: Infinity,
+      gcTime: Infinity,
     },
   },
-  logger: {
-    // eslint-disable-next-line no-console
-    log: console.log,
-    // eslint-disable-next-line no-console
-    warn: console.warn,
-    error: () => {},
-  },
 });
+
+const HydrateAtoms = ({ children }: { children: ReactElement }): ReactElement => {
+  useHydrateAtoms([[queryClientAtom, queryClient]]);
+  return children;
+};
 
 const TestApp = (): JSX.Element => {
   return (
     <QueryClientProvider client={queryClient}>
-      <Provider initialValues={[[queryClientAtom, queryClient]]}>
-        <App />
+      <Provider>
+        <HydrateAtoms>
+          <App />
+        </HydrateAtoms>
       </Provider>
     </QueryClientProvider>
   );

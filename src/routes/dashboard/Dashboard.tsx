@@ -6,8 +6,8 @@ import { TargetsPanel } from './TargetsPanel';
 import { CommandBar } from './CommandBar';
 
 const Dashboard = (): JSX.Element => {
-  const shapes = useAtomValue(shapesAtom);
-  const isEmpty = shapes.length === 0;
+  const { data: shapes } = useAtomValue(shapesAtom);
+  const isEmpty = shapes?.length === 0;
 
   return (
     <div className="min-h-screen">

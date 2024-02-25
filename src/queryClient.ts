@@ -11,7 +11,7 @@ const queryClient = new QueryClient({
   },
   queryCache: new QueryCache({
     onError: (error) =>
-      toast.error(`Something went wrong: ${(error as Error).message}`, {
+      toast.error(`Something went wrong: ${error.message}`, {
         ariaProps: {
           role: 'status',
           'aria-live': 'polite',

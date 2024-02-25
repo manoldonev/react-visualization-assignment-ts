@@ -3,7 +3,7 @@ import { selectedItemsAtom } from './selection';
 import { shapesAtom } from './query';
 
 export const actualValuesAtom = atom((get) => {
-  const data = get(shapesAtom);
+  const { data } = get(shapesAtom);
   const selectedItems = get(selectedItemsAtom);
 
   const totalCount = selectedItems.size;
@@ -14,7 +14,7 @@ export const actualValuesAtom = atom((get) => {
   let smallCount = 0;
   let orangeCount = 0;
 
-  data.forEach((item) => {
+  data?.forEach((item) => {
     if (!selectedItems.has(item.id)) {
       return;
     }

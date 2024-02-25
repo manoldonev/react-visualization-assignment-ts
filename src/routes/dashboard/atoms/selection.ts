@@ -1,7 +1,7 @@
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import type { Patch } from 'immer';
 import { applyPatches, produce } from 'immer';
-import { atomWithImmer } from 'jotai/immer';
+import { atomWithImmer } from 'jotai-immer';
 
 // TODO: jotai-in-big-project best practices still not set in stone (see https://github.com/pmndrs/jotai/discussions/896)
 // TODO: consider whether it makes sense to define "model" and "action" atoms in separate files (e.g. selection.model.ts and selection.controller.ts)
