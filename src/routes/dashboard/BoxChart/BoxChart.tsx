@@ -8,9 +8,7 @@ const BoxChart = ({ className = '', data }: { className?: string; data: RectShap
 
   return (
     <ul className={`flex max-w-5xl flex-wrap gap-x-2 gap-y-3 ${className}`}>
-      {data?.map((item) => (
-        <MemoBoxChartItem key={item.id} data={item} isSelected={selectedItems.has(item.id)} />
-      ))}
+      {data?.map((item) => <MemoBoxChartItem key={item.id} data={item} isSelected={selectedItems.has(item.id)} />)}
     </ul>
   );
 };
