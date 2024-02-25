@@ -18,7 +18,7 @@ const Dashboard = (): JSX.Element => {
 
         {!isEmpty && (
           <div className="mx-auto flex w-fit flex-col">
-            <div className="sticky top-0 flex flex-wrap justify-center bg-white py-3 px-4">
+            <div className="sticky top-0 flex flex-wrap justify-center bg-white px-4 py-3">
               <TargetsPanel className="flex flex-wrap justify-center" />
               <CommandBar className="flex gap-3" />
             </div>
