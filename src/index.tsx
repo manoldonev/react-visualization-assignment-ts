@@ -21,7 +21,7 @@ const initializeMockServiceWorker = async (): Promise<void> => {
         url: `${import.meta.env.BASE_URL}mockServiceWorker.js`,
       },
       onUnhandledRequest: ({ url }, print) => {
-        if (!url.pathname.startsWith('https://mdonev-mock.com/')) {
+        if (!url.startsWith('https://mdonev-mock.com/')) {
           return;
         }
 
