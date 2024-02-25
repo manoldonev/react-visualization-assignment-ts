@@ -10,7 +10,7 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^14.2.1",
-    "@vitejs/plugin-react": "^2.0.0",
+    "@vitejs/plugin-react": "^4.0.0",
     "axios": "^1.0.0",
     "immer": "^9.0.15",
     "jotai": "^2.0.0",
