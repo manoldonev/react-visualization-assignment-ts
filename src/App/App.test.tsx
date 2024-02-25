@@ -4,7 +4,7 @@ import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'jotai';
 import { queryClientAtom } from 'jotai-tanstack-query';
-import { rest } from 'msw';
+import { HttpResponse, http } from 'msw';
 import { useHydrateAtoms } from 'jotai/react/utils';
 import { server } from '../mocks/server';
 import { App } from './App';
@@ -95,8 +95,8 @@ describe('visualization app', () => {
 
   test('handles server error gracefully', async () => {
     server.use(
-      rest.get('https://mdonev-mock.com/shapes', (_req, res, ctx) => {
-        return res.once(ctx.status(500, 'Mocked server error'));
+      http.get('https://mdonev-mock.com/shapes', () => {
+        return new HttpResponse(null, { status: 500, statusText: 'Mocked server error' });
       }),
     );
 

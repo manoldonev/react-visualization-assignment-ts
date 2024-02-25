@@ -1,8 +1,9 @@
-import { rest } from 'msw';
+import { HttpResponse, http } from 'msw';
+
 import { shapes } from './seed';
 
 export const handlers = [
-  rest.get('https://mdonev-mock.com/shapes', (_req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(shapes));
+  http.get('https://mdonev-mock.com/shapes', () => {
+    return HttpResponse.json(shapes);
   }),
 ];
