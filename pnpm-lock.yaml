@@ -30,14 +30,14 @@ dependencies:
     specifier: ^1.1.2
     version: 1.6.7
   immer:
-    specifier: ^9.0.15
-    version: 9.0.21
+    specifier: ^10.0.0
+    version: 10.0.3
   jotai:
     specifier: ^2.6.5
     version: 2.6.5(@types/react@18.2.58)(react@18.2.0)
   jotai-immer:
     specifier: ^0.3.0
-    version: 0.3.0(immer@9.0.21)(jotai@2.6.5)(react@18.2.0)
+    version: 0.3.0(immer@10.0.3)(jotai@2.6.5)(react@18.2.0)
   jotai-tanstack-query:
     specifier: ^0.8.5
     version: 0.8.5(@tanstack/query-core@5.24.1)(jotai@2.6.5)(wonka@6.3.4)
@@ -3717,8 +3717,8 @@ packages:
     resolution: {integrity: sha512-5Fytz/IraMjqpwfd34ke28PTVMjZjJG2MPn5t7OE4eUCUNf8BAa7b5WUS9/Qvr6mwOQS7Mk6vdsMno5he+T8Xw==}
     engines: {node: '>= 4'}
 
-  /immer@9.0.21:
-    resolution: {integrity: sha512-bc4NBHqOqSfRW7POMkHd51LvClaeMXpm8dx0e8oE2GORbq5aRK7Bxl4FyzVLdGtLmvLKL7BTDBG5ACQm4HWjTA==}
+  /immer@10.0.3:
+    resolution: {integrity: sha512-pwupu3eWfouuaowscykeckFmVTpqbzW+rXFCX8rQLkZzM9ftBmU/++Ra+o+L27mz03zJTlyV4UUr+fdKNffo4A==}
     dev: false
 
   /import-fresh@3.3.0:
@@ -3984,14 +3984,14 @@ packages:
     hasBin: true
     dev: true
 
-  /jotai-immer@0.3.0(immer@9.0.21)(jotai@2.6.5)(react@18.2.0):
+  /jotai-immer@0.3.0(immer@10.0.3)(jotai@2.6.5)(react@18.2.0):
     resolution: {integrity: sha512-k+o4rWfWWLyHfucHAdoiN+l8flxMrKC/bEFvJA98znj+kbPW5R90EPa1u8mhWLJTABW3xjAp7Z3kyD3FVi0Hgw==}
     peerDependencies:
       immer: '*'
       jotai: '>=2.0.0'
       react: '>=17.0.0'
     dependencies:
-      immer: 9.0.21
+      immer: 10.0.3
       jotai: 2.6.5(@types/react@18.2.58)(react@18.2.0)
       react: 18.2.0
     dev: false

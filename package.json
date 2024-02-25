@@ -16,7 +16,7 @@
     "@testing-library/user-event": "^14.4.3",
     "@vitejs/plugin-react": "^4.2.1",
     "axios": "^1.1.2",
-    "immer": "^9.0.15",
+    "immer": "^10.0.0",
     "jotai": "^2.6.5",
     "jotai-immer": "^0.3.0",
     "jotai-tanstack-query": "^0.8.5",
